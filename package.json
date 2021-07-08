@@ -1,0 +1,9 @@
+{
+  "name": "4502021",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "commonjs",
+  "repository": "https://github.com/theharshrastogi/4502021.git",
+  "author": "Harsh Rastogi <rastogiharsh04@gmail.com>",
+  "license": "MIT"
+}
