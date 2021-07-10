@@ -1,5 +1,5 @@
 const TreeNode = require("./TreeNode");
-
+const Queue = require("../Queue");
 class BinaryTree {
   root = null;
 
@@ -16,6 +16,27 @@ class BinaryTree {
         current = current.right;
       }
     }
+  }
+
+  delete(data, root = this.root) {
+    if (!root) return null;
+
+    if (data < root.data) {
+      root.left = this.delete(data, root.left);
+    } else if (data > root.data) {
+      root.right = execute(data, root.right);
+    } else {
+      if (!root.left) return root.right;
+      if (!root.right) return root.left;
+
+      let smallestSuccessor = root.right;
+      while (smallestSuccessor.left) {
+        smallestSuccessor = smallestSuccessor.left;
+      }
+      root.data = smallestSuccessor.data;
+      this.delete(smallestSuccessor.data, root.right);
+    }
+    return root;
   }
 
   traverse(current = this.root, type = "inorder") {
@@ -64,14 +85,13 @@ class BinaryTree {
 
   levelTraversal(root = this.root) {
     if (!root) return;
+    const queue = new Queue();
+    queue.enQueue(root);
 
-    const queue = [];
-    queue.push(root);
-
-    while (queue.length) {
-      const current = queue.shift();
-      current.left && queue.push(current.left);
-      current.right && queue.push(current.right);
+    while (!queue.isEmpty) {
+      const current = queue.deQueue();
+      current.left && queue.enQueue(current.left);
+      current.right && queue.enQueue(current.right);
       console.log(current.data);
     }
   }
@@ -135,8 +155,11 @@ const tree = new BinaryTree();
 // tree.traverse();
 // console.log(tree.size);
 // console.log(tree.height);
-// tree.levelTraversal();
-console.log(tree.rightView());
+// console.log(tree.rightView());
+tree.delete(50);
+tree.traverse();
+console.log("\n\n");
+tree.levelTraversal();
 // console.log(tree.maximum);
 // console.log(tree.minimum);
 
