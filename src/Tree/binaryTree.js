@@ -61,13 +61,83 @@ class BinaryTree {
     };
     return calculate();
   }
+
+  levelTraversal(root = this.root) {
+    if (!root) return;
+
+    const queue = [];
+    queue.push(root);
+
+    while (queue.length) {
+      const current = queue.shift();
+      current.left && queue.push(current.left);
+      current.right && queue.push(current.right);
+      console.log(current.data);
+    }
+  }
+
+  leftView(root = this.root) {
+    if (!root) return [];
+    let maxHeight = 0;
+    let nodes = [];
+    const calculate = (current = root, height = 1) => {
+      if (!current) return;
+
+      if (height > maxHeight) {
+        nodes.push(current.data);
+        maxHeight = height;
+      }
+
+      calculate(current.left, 1 + height);
+      calculate(current.right, 1 + height);
+    };
+    calculate();
+  }
+
+  rightView(root = this.root) {
+    if (!root) return [];
+    let maxHeight = 0;
+    let nodes = [];
+    const calculate = (current = root, height = 1) => {
+      if (!current) return;
+
+      if (height > maxHeight) {
+        nodes.push(current.data);
+        maxHeight = height;
+      }
+
+      calculate(current.right, 1 + height);
+      calculate(current.left, 1 + height);
+
+      return nodes;
+    };
+    return calculate();
+  }
+
+  get maximum() {
+    if (!this.root) return;
+    let current = this.root;
+    while (current.right) current = current.right;
+    return current;
+  }
+
+  get minimum() {
+    if (!this.root) return;
+    let current = this.root;
+    while (current.left) current = current.left;
+    return current;
+  }
 }
 
 const tree = new BinaryTree();
 [50, 30, 80, 20, 40, 60, 70].forEach((val) => tree.add(val));
 
-tree.traverse();
-console.log(tree.size);
-console.log(tree.height);
+// tree.traverse();
+// console.log(tree.size);
+// console.log(tree.height);
+// tree.levelTraversal();
+console.log(tree.rightView());
+// console.log(tree.maximum);
+// console.log(tree.minimum);
 
 module.exports = BinaryTree;
