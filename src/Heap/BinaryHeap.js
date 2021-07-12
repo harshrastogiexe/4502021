@@ -108,11 +108,4 @@ class BinaryHeap {
   }
 }
 
-const store = new BinaryHeap("max");
-store.heap = [7, 20, 15, 3, 12, 4];
-// store.buildHeap();
-// console.log(store.heap);
-// store.delete(3);
-// console.log(store.heap);
-
-BinaryHeap.sort(store.heap);
+module.exports = BinaryHeap;
