@@ -21,22 +21,35 @@ class BinaryTree {
   delete(data, root = this.root) {
     if (!root) return null;
 
-    if (data < root.data) {
-      root.left = this.delete(data, root.left);
-    } else if (data > root.data) {
-      root.right = execute(data, root.right);
-    } else {
+    if (data < root.data) root.left = this.delete(data, root.left);
+    else if (data > root.data) root.right = execute(data, root.right);
+    else {
       if (!root.left) return root.right;
       if (!root.right) return root.left;
 
       let smallestSuccessor = root.right;
-      while (smallestSuccessor.left) {
-        smallestSuccessor = smallestSuccessor.left;
-      }
+      while (smallestSuccessor.left) smallestSuccessor = smallestSuccessor.left;
+
       root.data = smallestSuccessor.data;
       this.delete(smallestSuccessor.data, root.right);
     }
     return root;
+  }
+
+  static isBST({ root } = tree) {
+    if (!root) return;
+    const check = (current = root, min = -Infinity, max = Infinity) => {
+      if (!current) return true;
+      if (current.data > min && current.data <= max)
+        return (
+          check(current.left, min, current.data) &&
+          check(current.right, current.data, max)
+        );
+
+      return false;
+    };
+
+    return check();
   }
 
   traverse(current = this.root, type = "inorder") {
@@ -148,19 +161,5 @@ class BinaryTree {
     return current;
   }
 }
-
-const tree = new BinaryTree();
-[50, 30, 80, 20, 40, 60, 70].forEach((val) => tree.add(val));
-
-// tree.traverse();
-// console.log(tree.size);
-// console.log(tree.height);
-// console.log(tree.rightView());
-tree.delete(50);
-tree.traverse();
-console.log("\n\n");
-tree.levelTraversal();
-// console.log(tree.maximum);
-// console.log(tree.minimum);
 
 module.exports = BinaryTree;
