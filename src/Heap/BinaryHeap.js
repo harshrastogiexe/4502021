@@ -94,11 +94,25 @@ class BinaryHeap {
       this.heapify(i);
     }
   }
+
+  static sort(array = []) {
+    const store = new BinaryHeap("max");
+    store.heap = array;
+    store.buildHeap();
+    const sortedArray = [];
+    for (let i = store._last; i >= 0; i--) {
+      sortedArray.push(store.extract());
+    }
+    console.log(sortedArray);
+    return sortedArray;
+  }
 }
 
 const store = new BinaryHeap("max");
 store.heap = [7, 20, 15, 3, 12, 4];
-store.buildHeap();
-console.log(store.heap);
-store.delete(3);
-console.log(store.heap);
+// store.buildHeap();
+// console.log(store.heap);
+// store.delete(3);
+// console.log(store.heap);
+
+BinaryHeap.sort(store.heap);
