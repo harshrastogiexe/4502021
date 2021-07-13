@@ -1,3 +1,5 @@
+const Queue = require("../Queue");
+
 class MatrixGraph {
   constructor(matrix) {
     this.matrix = matrix;
@@ -99,11 +101,57 @@ class ListGraph {
     this.list.push(vertex);
   }
 
+  _generateVisitedArray() {
+    return new Array(this.size).fill(false);
+  }
+
+  bfs(callback, arrayVisited, source = 0) {
+    const visited = arrayVisited || this._generateVisitedArray();
+    const queue = new Queue();
+    queue.enQueue(source);
+    visited[source] = true;
+
+    while (!queue.isEmpty) {
+      const vertex = queue.deQueue();
+      callback(vertex);
+
+      this.getAdjecent(vertex).forEach((vertex) => {
+        if (visited[vertex]) return;
+        visited[vertex] = true;
+        queue.enQueue(vertex);
+      });
+    }
+  }
+
+  dfs(callback, visitedArray, source = 0) {
+    const visited = visitedArray || this._generateVisitedArray();
+
+    const traverse = (start = source) => {
+      visited[start] = true;
+      callback(start);
+
+      for (const vertex of this.getAdjecent(start)) {
+        if (!visited[vertex]) traverse(vertex);
+      }
+    };
+
+    traverse();
+  }
+
+  dfsDissconnected() {
+    let visited = this._generateVisitedArray();
+    for (let vertex in this.list)
+      !visited[vertex] && this.dfs(console.log, visited);
+  }
+
+  bfsDisconnected() {
+    let visited = this._generateVisitedArray();
+    this.list.forEach(
+      (_, index) => !visited[index] && this.bfs(console.log, visited)
+    );
+  }
+
   remove(u) {
-    // for (let i = u + 1; i < this.list.length; i++) {
-    //   this.list[i - 1] = this.list[i];
-    // }
-    // this.list.pop();
     this.list[2] = [];
 
     this.list.forEach((row) => {
@@ -117,13 +165,17 @@ class ListGraph {
 }
 
 const adjecentMatrix = [
-  [0, 1, 1, 0],
-  [1, 0, 1, 0],
-  [1, 1, 0, 1],
-  [0, 0, 1, 0],
+  [0, 1, 1, 0, 0, 0, 0, 0],
+  [0, 0, 0, 1, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 1, 0],
+  [0, 0, 0, 0, 0, 0, 1, 0],
+  [0, 0, 0, 0, 1, 0, 0, 1],
+  [0, 0, 0, 0, 0, 0, 0, 1],
+  [0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
 const graph = new MatrixGraph(adjecentMatrix);
 const listGraph = new ListGraph(graph.convert());
-listGraph.remove(2);
-console.log(listGraph);
+// listGraph.bfs(console.log);
+listGraph.dfsDissconnected(console.log);
