@@ -131,7 +131,7 @@ class ListGraph {
       callback(start);
 
       for (const vertex of this.getAdjecent(start)) {
-        if (!visited[vertex]) traverse(vertex);
+        !visited[vertex] && traverse(vertex);
       }
     };
 
@@ -150,6 +150,42 @@ class ListGraph {
       (_, index) => !visited[index] && this.bfs(console.log, visited)
     );
   }
+
+  get isCyclic() {
+    const visited = this._generateVisitedArray();
+    const queue = new Queue();
+
+    queue.enQueue(0);
+    visited[0] = true;
+
+    while (!queue.isEmpty) {
+      const vertex = queue.deQueue();
+      visited[vertex] = 
+      true;
+      console.log(vertex);
+      for (const adjecent of this.getAdjecent(vertex)) {
+        if (!visited[adjecent]) {
+          queue.enQueue(adjecent);
+          // visited[adjecent] = true;
+        } else return true;
+      }
+    }
+    return false;
+  }
+
+  // get isCyclic() {
+  //   const visited = this._generateVisitedArray();
+
+  //   const traverse = (source = 0, parent = null) => {
+  //     visited[source] = true;
+  //     for (const adjecentVertex of this.getAdjecent(source)) {
+  //       if (visited[adjecentVertex] && adjecentVertex !== parent) return true;
+  //       if (!visited[adjecentVertex]) return traverse(adjecentVertex, source);
+  //     }
+  //     return false;
+  //   };
+  //   return traverse();
+  // }
 
   remove(u) {
     this.list[2] = [];
