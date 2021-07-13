@@ -164,18 +164,18 @@ class ListGraph {
   }
 }
 
-const adjecentMatrix = [
-  [0, 1, 1, 0, 0, 0, 0, 0],
-  [0, 0, 0, 1, 1, 0, 0, 0],
-  [0, 0, 0, 0, 0, 1, 0, 0],
-  [0, 0, 0, 0, 0, 0, 1, 0],
-  [0, 0, 0, 0, 0, 0, 1, 0],
-  [0, 0, 0, 0, 1, 0, 0, 1],
-  [0, 0, 0, 0, 0, 0, 0, 1],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-];
+// const adjecentMatrix = [
+//   [0, 1, 1, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 1, 1, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 1, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 1, 0],
+//   [0, 0, 0, 0, 0, 0, 1, 0],
+//   [0, 0, 0, 0, 1, 0, 0, 1],
+//   [0, 0, 0, 0, 0, 0, 0, 1],
+//   [0, 0, 0, 0, 0, 0, 0, 0],
+// ];
 
-const graph = new MatrixGraph(adjecentMatrix);
-const listGraph = new ListGraph(graph.convert());
-// listGraph.bfs(console.log);
-listGraph.dfsDissconnected(console.log);
+// const graph = new MatrixGraph(adjecentMatrix);
+// console.log(graph.convert());
+
+module.exports = ListGraph;
