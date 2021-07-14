@@ -74,6 +74,12 @@ class ListGraph {
     return this.list[u];
   }
 
+  inDegree(u) {
+    let count = 0;
+    this.list.forEach((adjecent) => adjecent.includes(u) && count++);
+    return count;
+  }
+
   degree(u) {
     return this.list[u].length;
   }
@@ -160,32 +166,64 @@ class ListGraph {
 
     while (!queue.isEmpty) {
       const vertex = queue.deQueue();
-      visited[vertex] = 
-      true;
-      console.log(vertex);
+
       for (const adjecent of this.getAdjecent(vertex)) {
-        if (!visited[adjecent]) {
+        if (!visited[vertex]) {
           queue.enQueue(adjecent);
-          // visited[adjecent] = true;
-        } else return true;
+        }
       }
     }
     return false;
   }
 
-  // get isCyclic() {
-  //   const visited = this._generateVisitedArray();
+  static topologicalSortingDFS(graph = new ListGraph()) {
+    const stack = [];
+    const visited = graph._generateVisitedArray();
 
-  //   const traverse = (source = 0, parent = null) => {
-  //     visited[source] = true;
-  //     for (const adjecentVertex of this.getAdjecent(source)) {
-  //       if (visited[adjecentVertex] && adjecentVertex !== parent) return true;
-  //       if (!visited[adjecentVertex]) return traverse(adjecentVertex, source);
-  //     }
-  //     return false;
-  //   };
-  //   return traverse();
-  // }
+    graph.list.forEach(
+      (_, vertex) =>
+        !visited[vertex] && graph.dfs(() => stack.push(vertex), visited)
+    );
+
+    while (stack.length) {
+      console.log(stack.pop());
+    }
+  }
+
+  static topologicalSortingBFS(graph = new ListGraph()) {
+    const indegrees = graph.list.map((_, index) => graph.inDegree(index));
+    const queue = new Queue();
+    const topologicalArray = [];
+
+    indegrees.forEach((degree, vertex) => !degree && queue.enQueue(vertex));
+
+    while (!queue.isEmpty) {
+      const vertex = queue.deQueue();
+      topologicalArray.push(vertex);
+      graph.getAdjecent(vertex).forEach((adjecent) => {
+        --indegrees[adjecent] === 0 && queue.enQueue(adjecent);
+      });
+    }
+
+    return topologicalArray;
+  }
+
+  get isCyclic() {
+    const indegrees = this.list.map((_, index) => this.inDegree(index));
+    const queue = new Queue();
+    let count = 0;
+    indegrees.forEach((degree, vertex) => !degree && queue.enQueue(vertex));
+
+    while (!queue.isEmpty) {
+      const vertex = queue.deQueue();
+      this.getAdjecent(vertex).forEach((adjecent) => {
+        --indegrees[adjecent] === 0 && queue.enQueue(adjecent);
+      });
+      count++;
+    }
+
+    return count !== this.size;
+  }
 
   remove(u) {
     this.list[2] = [];

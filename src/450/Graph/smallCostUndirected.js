@@ -28,13 +28,3 @@ function smallestCostFromSource(graph = new Graph(), source = 0, to = -1) {
   console.log(to < 0 ? distance : distance[to]);
   return to < 0 ? distance : distance[to];
 }
-
-// const graph = new Graph([[1, 2], [3, 4], [5], [6], [6], [4, 7], [7], []]);
-const graph2 = new Graph([[1], [0, 2, 3], [1, 3, 4], [1, 2], [2, 5], [4]]);
-// const graph2 = new Graph([[1], [2], [1]]);
-// console.log(graph2.bfs(console.log));
-// graph2.dfs(console.log);
-// smallestCostFromSource(graph, 5);
-// smallestCostFromSource(graph2);
-
-console.log(graph2.isCyclic);
