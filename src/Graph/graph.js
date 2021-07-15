@@ -252,4 +252,4 @@ class ListGraph {
 // const graph = new MatrixGraph(adjecentMatrix);
 // console.log(graph.convert());
 
-module.exports = MatrixGraph;
+module.exports = { ListGraph, MatrixGraph };
