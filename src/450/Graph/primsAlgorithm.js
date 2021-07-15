@@ -1,56 +1,66 @@
-const ListGraph = require("../../Graph/graph");
-const Queue = require("../../Queue");
+const Graph = require("../../Graph/graph");
 
-function primsAlgorithm(graph = new ListGraph(), weight) {
-  const visited = graph._generateVisitedArray();
-  const queue = new Queue();
-  visited[0] = true;
+function calcCost(graph = new Graph()) {
+  const parent = primsAlgorithm(graph);
+  let result = 0;
+  for (let i = 1; i < graph.size; i++) {
+    result += graph.matrix[i][parent[i]];
+  }
+  return result;
 }
 
-// function primsAlgorithm(graph = new ListGraph(), weight) {
-//   const visited = graph._generateVisitedArray();
-//   const queue = new Queue();
-//   queue.enQueue(0);
-//   visited[0] = true
-//   let result = 0;
-//   while (!queue.isEmpty) {
-//     const vertex = queue.deQueue();
-//     // find minimum edge connected to `vertex`
+function printMST(graph = new Graph()) {
+  const parent = primsAlgorithm(graph);
+  for (let i = 1; i < graph.size; i++) {
+    console.log(i, " -> ", parent[i], " Weight: ", graph.matrix[parent[i]][i]);
+  }
+}
 
-//     const min = { weight: -1, vertex: null };
-//     graph.getAdjecent(vertex).forEach((adjecent) => {
-//       console.log(
-//         `Edge: [${vertex}, ${adjecent}], Weight: ${weight[vertex][adjecent]} `
-//       );
-//       // selecting edge which is not selected
+function selectMinVertex(distance = [], MST = new Set()) {
+  let minimum = Infinity;
+  let selectedVertex;
+  for (let vertex = 0; vertex < distance.length; vertex++)
+    if (!MST.has(vertex) && distance[vertex] < minimum) {
+      selectedVertex = vertex;
+      minimum = distance[vertex];
+    }
+  return selectedVertex;
+}
 
-//       if (!visited[adjecent] && min.weight === -1) {
-//         min.weight = weight[vertex][adjecent];
-//         min.vertex = adjecent;
-//         return;
-//       }
+function primsAlgorithm(graph = new Graph(), source = 0) {
+  const parent = new Array(graph.size).fill(-1);
+  const distance = new Array(graph.size).fill(Infinity);
+  const MST = new Set();
 
-//       if (!visited[adjecent] && weight[vertex][adjecent] < min.weight) {
-//         min.weight = weight[vertex][adjecent];
-//         min.vertex = adjecent;
-//       }
-//     });
-//     // console.log(selectedVertex);
-//     console.log(min);
-//     result += min.weight;
-//   }
-// }
+  distance[source] = 0;
+
+  for (let i = 0; i < graph.size - 1; i++) {
+    const vertex = selectMinVertex(distance, MST);
+    MST.add(vertex);
+    graph.getAdjecent(vertex).forEach((adjecent) => {
+      if (
+        !MST.has(adjecent) &&
+        graph.matrix[vertex][adjecent] < distance[adjecent]
+      ) {
+        distance[adjecent] = graph.matrix[vertex][adjecent];
+        parent[adjecent] = vertex;
+      }
+    });
+  }
+  return parent;
+}
 
 const weight = [
-  [Infinity, 5, 8, Infinity],
-  [5, Infinity, 10, 15],
-  [8, 10, Infinity, 20],
-  [0, Infinity, Infinity, 0],
+  [0, 4, 6, 0, 0, 0],
+  [4, 0, 6, 3, 4, 0],
+  [6, 6, 0, 1, 0, 0],
+  [0, 3, 1, 0, 2, 3],
+  [0, 4, 0, 2, 0, 7],
+  [0, 0, 0, 3, 7, 0],
 ];
-const graph = new ListGraph([
-  [1, 2],
-  [0, 2, 3],
-  [0, 1, 3],
-  [1, 2],
-]);
-primsAlgorithm(graph, weight);
+const graph = new Graph(weight);
+const connectedEdges = primsAlgorithm(graph);
+console.log(connectedEdges);
+console.log("Min Cost", calcCost(graph));
+printMST(graph);
+ 
