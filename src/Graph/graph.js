@@ -103,6 +103,14 @@ class ListGraph {
     this.list[u].pop();
   }
 
+  forEachEdge(callback) {
+    for (let i = 0; i < this.list.length; i++) {
+      for (let j = 0; j < this.list[i].length; j++) {
+        callback(i, this.list[i][j]);
+      }
+    }
+  }
+
   add(vertex = []) {
     this.list.push(vertex);
   }
