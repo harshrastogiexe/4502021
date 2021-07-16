@@ -1,5 +1,6 @@
 const Queue = require("../../Queue");
 const ListGraph = require("../../Graph/graph");
+const Graph = require("../../Graph/GraphV2");
 
 const cost = [
   [Infinity, 2, Infinity, Infinity, 1, Infinity],
@@ -9,6 +10,10 @@ const cost = [
   [Infinity, Infinity, 2, Infinity, Infinity, 4],
   [Infinity, Infinity, Infinity, 1, Infinity, Infinity],
 ];
+
+function sortestDistanceToEveryVertex(graph = new Graph()) {
+  
+}
 
 function sortestDistanceToVertex(graph = new ListGraph(), cost, source = 0) {
   const visited = graph._generateVisitedArray();

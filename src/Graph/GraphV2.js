@@ -1,10 +1,5 @@
-class GraphParent {
-  constructor() {}
-}
-
-class GraphList extends GraphParent {
+class Graph {
   constructor({ list, matrix, type }) {
-    super(type);
     if (matrix) list = this._generateList(matrix);
 
     if (!list) throw new Error("Adjency List Required");
@@ -104,13 +99,14 @@ class GraphList extends GraphParent {
   }
 
   _transpose() {
-    for (let i = 0; i < this.size; i++) {
-      for (let j = i + 1; j < this.size; j++) {
-        [this.cost[j][i], this.cost[i][j]] = [this.cost[i][j], this.cost[j][i]];
-      }
-    }
+    for (let i = 0; i < this.size - 1; i++)
+      for (let j = i + 1; j < this.size; j++)
+        [this._cost[j][i], this._cost[i][j]] = [
+          this._cost[i][j],
+          this._cost[j][i],
+        ];
   }
-  
+
   reverse() {
     if (this.type === "undirected") return;
 
@@ -130,21 +126,43 @@ class GraphList extends GraphParent {
       console.log(output);
     });
   }
+
+  dfs() {
+    const visited = this._generateVisitedArray();
+
+    const traverse = (vertex) => {
+      visited[vertex] = true;
+      this.forEachAdjecent(vertex, (adjecent) => {
+        !visited[adjecent] && traverse(adjecent);
+      });
+    };
+
+    this.forEachVertex((vertex) => {
+      !visited[vertex] && traverse(vertex);
+    });
+  }
+
+  bfs() {
+    const visited = this._generateVisitedArray();
+  }
 }
 
-const graph = new GraphList({
-  matrix: [
-    [Infinity, 2, 3, Infinity, Infinity, Infinity],
-    [2, Infinity, 5, 8, 6, Infinity],
-    [3, 5, Infinity, Infinity, 4, Infinity],
-    [Infinity, 8, Infinity, Infinity, 12, 9],
-    [Infinity, 6, 4, 12, Infinity, 10],
-    [Infinity, Infinity, Infinity, 9, 10, Infinity],
-  ],
-  type: "undirected",
-});
+module.exports = Graph;
+
+// const graph = new GraphList({
+//   matrix: [
+//     [Infinity, 2, 3, Infinity, Infinity, Infinity],
+//     [2, Infinity, 5, 8, 6, Infinity],
+//     [3, 5, Infinity, Infinity, 4, Infinity],
+//     [Infinity, 8, Infinity, Infinity, 12, 9],
+//     [Infinity, 6, 4, 12, Infinity, 10],
+//     [Infinity, Infinity, Infinity, 9, 10, Infinity],
+//   ],
+//   type: "undirected",
+// });
 
 // const graph = new GraphList({ list: [[1], [3], [2], []], type: "directed" });
 // console.log(graph.list);
 // graph.reverse();
-graph._transpose();
+// graph._transpose();
+// graph.bfs();
