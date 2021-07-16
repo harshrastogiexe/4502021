@@ -1,19 +1,19 @@
+const Queue = require("../Queue");
+
 class Graph {
   constructor({ list, matrix, type }) {
-    if (matrix) list = this._generateList(matrix);
+    if (matrix) !list && (list = this._generateList(matrix));
 
     if (!list) throw new Error("Adjency List Required");
     if (!(list instanceof Array))
       throw new Error(`List must be Array, Got ${typeof list}`);
     if (!list.every((vertex) => vertex instanceof Array))
       throw new Error(`Every Vertex must be Array, Got ${typeof list}`);
-    if (typeof type !== "string")
-      throw new Error(`Expected Type String, Got ${typeof type}`);
 
     this._cost = matrix;
     this._list = list;
     this._size = list.length;
-    this._type = type || "undirected";
+    this._type = type;
   }
 
   connect(u, v) {
@@ -78,6 +78,7 @@ class Graph {
   _generateList(matrix) {
     const size = matrix.length;
     this._list = new Array(size);
+    for (let i = 0; i < size; i++) this._list[i] = [];
 
     for (let i = 0; i < size; i++)
       for (let j = 0; j < size; j++)
@@ -114,7 +115,6 @@ class Graph {
     this._transpose();
     this.forEachEdge((u, v) => {
       list[v].push(u);
-      console.log(v, u, list[v]);
     });
 
     this._list = list;
@@ -142,14 +142,31 @@ class Graph {
     });
   }
 
-  bfs() {
+  bfs(props) {
+    const { before, after } = { before: null, after: null, ...props };
     const visited = this._generateVisitedArray();
+    const queue = new Queue();
+
+    queue.enQueue(0);
+    visited[0] = true;
+    while (!queue.isEmpty) {
+      const vertex = queue.deQueue();
+      this.forEachAdjecent(vertex, (adjecent) => {
+        before && before(vertex, adjecent);
+
+        if (visited[adjecent]) return;
+        queue.enQueue(adjecent);
+        visited[adjecent] = true;
+
+        after && after(vertex, adjecent);
+      });
+    }
   }
 }
 
 module.exports = Graph;
 
-// const graph = new GraphList({
+// const graph = new Graph({
 //   matrix: [
 //     [Infinity, 2, 3, Infinity, Infinity, Infinity],
 //     [2, Infinity, 5, 8, 6, Infinity],

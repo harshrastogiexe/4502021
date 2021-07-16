@@ -1,5 +1,5 @@
 const Queue = require("../../Queue");
-const ListGraph = require("../../Graph/graph");
+const { ListGraph } = require("../../Graph/graph");
 const Graph = require("../../Graph/GraphV2");
 
 const cost = [
@@ -12,48 +12,34 @@ const cost = [
 ];
 
 function sortestDistanceToEveryVertex(graph = new Graph()) {
-  
-}
+  const distances = graph._generateDistanceArray();
+  distances[0] = 0;
 
-function sortestDistanceToVertex(graph = new ListGraph(), cost, source = 0) {
-  const visited = graph._generateVisitedArray();
-  const distance = new Array(graph.size).fill(Infinity);
-  const queue = new Queue();
-
-  queue.enQueue(source);
-  visited[source] = true;
-  distance[source] = 0;
-
-  while (!queue.isEmpty) {
-    const vertex = queue.deQueue();
-
-    graph.getAdjecent(vertex).forEach((adjecent) => {
-      distance[adjecent] = Math.min(
-        cost[vertex][adjecent] + distance[vertex],
-        distance[adjecent]
-      );
-
-      if (visited[adjecent]) return;
-      queue.enQueue(adjecent);
-      visited[adjecent] = true;
-    });
-  }
-  return distance;
-}
-
-function sortestDistanceTopological(graph = new ListGraph(), cost, source = 0) {
-  const vertices = ListGraph.topologicalSortingBFS(graph);
-  const distance = new Array(graph.size).fill(Infinity);
-  distance[source] = 0;
-
-  vertices.forEach((vertex) => {
-    graph.getAdjecent(vertex).forEach((adjecent) => {
-      distance[adjecent] = Math.min(
-        cost[vertex][adjecent] + distance[vertex],
-        distance[adjecent]
-      );
-    });
+  graph.bfs({
+    before: (u, v) => {
+      if (distances[u] + graph.costOf(u, v) < distances[v])
+        distances[v] = distances[u] + graph.costOf(u, v);
+    },
   });
-  return distance;
+  return distances;
 }
-const graph = new ListGraph([[1, 4], [2], [3], [], [2, 5], [3]]);
+
+const list = [[1, 4], [2], [3], [], [2, 5], [3]];
+
+const listGraph = new ListGraph(list);
+const graph = new Graph({
+  matrix: cost,
+  list: list,
+});
+
+// console.log(graph);
+let start, end;
+start = performance.now();
+for (let i = 0; i < 400; i++) sortestDistanceToVertex(listGraph, cost);
+end = performance.now();
+console.log("Old:", (end - start) * 2.5);
+
+start = performance.now();
+end = performance.now();
+console.log("New:", (end - start) * 2.5);
+for (let i = 0; i < 400; i++) sortestDistanceToEveryVertex(graph);
