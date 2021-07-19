@@ -1,16 +1,15 @@
-const { ListGraph } = require("../../Graph/graph");
+const Graph = require("../../Graph/GraphV2");
 
-function bellmannfordAlgorithm(graph = new ListGraph(), cost) {
-  const distance = new Array(graph.size).fill(Infinity);
+function bellmannfordAlgorithm(graph = new Graph()) {
+  const distance = graph._generateDistanceArray();
   distance[0] = 0;
 
-  for (let count = 0; count < graph.size - 1; count++) {
+  for (let count = 0; count < graph.size - 1; count++)
     graph.forEachEdge((u, v) => {
-      if (distance[u] + cost[u][v] < distance[v]) {
-        distance[v] = distance[u] + cost[u][v];
-      }
+      if (distance[u] + graph.costOf(u, v) < distance[v])
+        distance[v] = distance[u] + graph.costOf(u, v);
     });
-  }
+
   return distance;
 }
 
@@ -21,5 +20,4 @@ const weight = [
   [Infinity, Infinity, Infinity, Infinity],
 ];
 
-const graph = new ListGraph([[1, 2], [2, 3], [3], []]);
-bellmannfordAlgorithm(graph, weight);
+const graph = new Graph({ matrix: weight });

@@ -1,5 +1,3 @@
-const Queue = require("../../Queue");
-const { ListGraph } = require("../../Graph/graph");
 const Graph = require("../../Graph/GraphV2");
 
 const cost = [
@@ -25,21 +23,3 @@ function sortestDistanceToEveryVertex(graph = new Graph()) {
 }
 
 const list = [[1, 4], [2], [3], [], [2, 5], [3]];
-
-const listGraph = new ListGraph(list);
-const graph = new Graph({
-  matrix: cost,
-  list: list,
-});
-
-// console.log(graph);
-let start, end;
-start = performance.now();
-for (let i = 0; i < 400; i++) sortestDistanceToVertex(listGraph, cost);
-end = performance.now();
-console.log("Old:", (end - start) * 2.5);
-
-start = performance.now();
-end = performance.now();
-console.log("New:", (end - start) * 2.5);
-for (let i = 0; i < 400; i++) sortestDistanceToEveryVertex(graph);
