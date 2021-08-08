@@ -6,13 +6,16 @@ function longestIncreasingSubsequence(array = [], len = array.length) {
 
   for (let i = 1; i < len; i++) {
     memo[i] = 1;
+
     for (let j = 0; j < i; j++)
-      if (array[j] < array[i]) memo[i] = Math.max(memo[i], memo[j] + 1);
+      if (array[j] < array[i] && memo[j] + 1 > memo[i]) memo[i] = memo[j] + 1;
+
     max = Math.max(max, memo[i]);
   }
   console.log({ memo });
   return max;
 }
+
 const binarySearch = (array, key) => {
   let start = 0,
     end = array.length - 1;
@@ -47,9 +50,12 @@ function lcsBinarySearch(array = [], len = array.length) {
       memo[index] = array[i];
     }
   }
-  console.log(memo);
+  console.log(
+    memo,
+    memo.reduce((sum, val) => sum + val)
+  );
   return memo.length;
 }
 
-const length = lcsBinarySearch([3, 10, 20, 4, 6, 7, 40, 50, 5]);
+const length = lcsBinarySearch([3, 20, 4, 6, 7, 30]);
 console.table({ length });

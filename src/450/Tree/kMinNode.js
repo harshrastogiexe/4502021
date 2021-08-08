@@ -7,8 +7,7 @@ function printKMinNode(tree = null, k) {
     const left = calculate(root.left);
     if (left) return left;
 
-    k--;
-    if (k === 0) return root;
+    if (--k === 0) return root;
 
     return calculate(root.right) || null;
   };
@@ -18,4 +17,4 @@ function printKMinNode(tree = null, k) {
 
 const tree = new BinaryTree();
 [50, 30, 80, 20, 40, 60, 70].forEach((val) => tree.add(val));
-console.log(printKMinNode(tree, 2));
+console.log(printKMinNode(tree, 1));
