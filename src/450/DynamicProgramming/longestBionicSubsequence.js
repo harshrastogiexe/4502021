@@ -13,7 +13,7 @@ function largestBionicSequence(array = []) {
   let max = lis[0] + lds[0] - 1;
   for (let i = 1; i < lis.length; i++) {
     const result = lis[i] + lds[i] - 1;
-    if (result > max) max = result;
+    if (result > max) max = result;hello.h
   }
   return max;
 }

@@ -2,7 +2,7 @@ const swap = require("../../utils");
 
 function sort(array = [], length = array.length) {
   function partition(left, right) {
-    const index = Math.floor((right + left) / 2);
+    const index = (right + left) >> 1;
     let pivot = array[index];
 
     while (left <= right) {
@@ -41,7 +41,7 @@ function union(array1, array2) {
       j++;
     }
   }
- 
+
   while (i < array1.length) union.push(array1[i++]);
   while (j < array2.length) union.push(array2[j++]);
   console.log(union);
