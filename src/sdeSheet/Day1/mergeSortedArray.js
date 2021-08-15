@@ -26,7 +26,7 @@ function mergeArray(array1, array2) {
         if (array2[j + gap] < array2[j])
           [array2[j], array2[j + gap]] = [array2[j + gap], array2[j]];
 
-    gap = calcgap(gap);
+    gap = calcgap(gap); 
   }
 
   return [array1, array2];
