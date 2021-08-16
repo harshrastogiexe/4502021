@@ -4,7 +4,6 @@
  */
 function mergeInterval(intervals, sorted = false) {
   !sorted && intervals.sort(([timeA], [timeB]) => timeA - timeB);
-  // console.log(intervals);
   const stack = [];
   stack.push(intervals[0]);
 
