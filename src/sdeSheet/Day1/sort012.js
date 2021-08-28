@@ -10,20 +10,9 @@ function sortColor(nums = []) {
   let mid = low;
 
   while (mid <= high) {
-    switch (nums[mid]) {
-      case 0: {
-        swap(nums, low++, mid++);
-        break;
-      }
-      case 1: {
-        mid++;
-        break;
-      }
-      case 2: {
-        swap(nums, mid, high--);
-        break;
-      }
-    }
+    if (nums[mid] === 0) swap(nums, low++, mid++);
+    else if (nums[mid] === 1) mid++;
+    else swap(nums, mid, high--);
   }
   return nums;
 }

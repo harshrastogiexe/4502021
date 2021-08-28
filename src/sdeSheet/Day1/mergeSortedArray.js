@@ -3,14 +3,16 @@
  * @param {number[]} array1 Array
  * @param {number[]} array2 Array
  */
+
 function mergeArray(array1, array2) {
   let lenA = array1.length,
     lenB = array2.length;
 
-  const calcgap = (initgap) => (initgap <= 1 ? 0 : Math.ceil(initgap / 2));
+  const calcgap = (initgap) => (initgap <= 1 ? 0 : initgap >> 1);
   let gap = calcgap(lenA + lenB);
 
-  while (gap > 0) {
+  while (gap) {
+    // gap > 0
     let i;
     for (i = 0; gap + i < lenA; i++)
       if (array1[gap + i] < array1[i])
@@ -26,14 +28,12 @@ function mergeArray(array1, array2) {
         if (array2[j + gap] < array2[j])
           [array2[j], array2[j + gap]] = [array2[j + gap], array2[j]];
 
-    gap = calcgap(gap); 
+    gap = calcgap(gap);
   }
 
   return [array1, array2];
 }
 
-const result = mergeArray(
-  [3, 27, 38, 43, 100, 201],
-  [9, 10, 82, 100, 203, 404]
-);
-mergeArray([1, 5, 9, 10, 15, 20], [2, 3, 8, 13]);
+const result = mergeArray([3, 27, 38, 43, 100, 201], [10, 82, 100, 203, 404]);
+// mergeArray([1, 5, 9, 10, 15, 20], [2, 3, 8, 13]);
+console.log(...result[0], ...result[1]);

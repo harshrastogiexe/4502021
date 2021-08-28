@@ -15,12 +15,12 @@ function missingReapeatingNumber(nums = []) {
 }
 
 function xorTechnique(nums = []) {
-  let calcxor = 0;
+  let calcxor = nums[0];
   for (let i = 1; i < nums.length; i++) calcxor ^= nums[i];
 
   for (let i = 1; i <= nums.length; i++) calcxor ^= i;
-  
-  const rightBit = num & ~(num - 1);
+
+  const rightBit = calcxor & ~(calcxor - 1);
   let missing = 0;
   let repeating = 0;
 
@@ -33,6 +33,7 @@ function xorTechnique(nums = []) {
     if (rightBit & i) missing ^= i;
     else repeating ^= i;
   }
+
   return { missing, repeating };
 }
 

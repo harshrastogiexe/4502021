@@ -3,11 +3,12 @@ function findDuplicate(nums = []) {
   let fast = nums[0];
 
   do {
-    console.log(slow, fast);
     slow = nums[slow];
     fast = nums[nums[fast]];
   } while (slow !== fast);
+
   fast = nums[0];
+  
   while (slow !== fast) {
     slow = nums[slow];
     fast = nums[fast];
