@@ -1,13 +1,23 @@
-function longestCommanSubscequnce(nums = []) {
-  const lcs = new Array(nums.length).fill(1);
+const { generateRandom } = require("../../utils/randomNumber");
 
-  for (let i = 0; i < nums.length; i++) {
-    for (let j = 0; j < i; j++) {
-      if (nums[j] < nums[i]) lcs[i] = Math.max(lcs[i], lcs[j] + 1);
+function longestCommanSubscequnce(nums = []) {
+  const set = new Set(nums);
+  let longestLength = 0;
+  for (let num of nums) {
+    if (!set.has(num - 1)) {
+      let currentNum = num + 1;
+      while (set.has(currentNum)) currentNum++;
+      longestLength = Math.max(longestLength, currentNum - num);
     }
   }
-
-  console.log(lcs);
+  return longestLength;
 }
 
-longestCommanSubscequnce([0, 3, 7, 2, 5, 8, 4, 6, 0]);
+const nums = [];
+
+// for (let number of generateRandom(5, { max: 6 })) nums.push(Math.round(number));
+
+longestCommanSubscequnce([1, 2, 0, 1]);
+longestCommanSubscequnce([100, 4, 200, 1, 3, 2]);
+// console.log(nums);
+// longestCommanSubscequnce(nums);
