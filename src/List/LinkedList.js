@@ -82,4 +82,29 @@ exports.List = class {
 
     this.head = start;
   }
+
+  removeNthFromEnd(num = 0, head = this.head) {
+    if (!head) return head;
+
+    let [behind, forward] = [head, head];
+    for (let i = 1; i < num + 1; i++) forward = forward.next;
+
+    let temp = null;
+    while (forward) {
+      forward = forward.next;
+      temp = behind;
+      behind = behind.next;
+    }
+    if (!temp) this.head = this.head.next;
+    else temp.next = behind.next;
+    return this.head;
+  }
+
 };
+
+const list = new this.List();
+list.add(..."1234".split(""));
+console.log({ list: [...list] });
+
+list.removeNthFromEnd(2);
+list.removeNthFromEnd(1);
